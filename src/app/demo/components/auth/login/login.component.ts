@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { Router } from '@angular/router'; 
+import { AuthenticationService } from 'src/app/demo/service/authentication.service';
 
 @Component({
     selector: 'app-login',
@@ -18,14 +19,21 @@ export class LoginComponent {
 
     valCheck: string[] = ['remember'];
 
+    email!: string;
     password!: string;
     item: any = {};
     productDialog: boolean = false;
 
-    constructor(public layoutService: LayoutService, private router: Router) { }
+    constructor(public layoutService: LayoutService, private router: Router, private authenticationService:AuthenticationService) { }
 
     onLogin(){
-        this.router.navigate(['/']);
+        if(this.authenticationService.logInUser(this.email, this.password)){
+            this.authenticationService.setLoginStatus(true);
+              this.router.navigate(['/brand']);
+          }else{
+            alert('Please enter valid credential.');
+          }
+        //this.router.navigate(['/']);
     }
 
     openRegister() {
